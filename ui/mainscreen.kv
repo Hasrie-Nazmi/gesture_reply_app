@@ -1,0 +1,33 @@
+
+<MainScreen>:
+    orientation: 'vertical'
+    padding: 40
+    spacing: 20
+
+    
+
+    Image:
+        id: cam_image
+        size_hint: (1, 0.75)
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)   # Full width, fixed height for the row container
+        height: 70             # Height of the button row
+        spacing: 15            # Gap space between the buttons
+        
+        Button:
+            text: "Delete Previous Text"
+            font_size: 16
+            on_press: root.on_button_click("Button 1 pressed")
+
+        Button:
+            text: "Clear Text"
+            font_size: 16
+            on_press: root.on_button_click("Button 2 pressed")
+
+        Button:
+            text: "Set Custom Replies"
+            font_size: 16
+            on_press: root.on_button_click("Button 3 pressed")
