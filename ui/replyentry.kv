@@ -1,24 +1,42 @@
 <ReplyEntry>:
-    orientation: 'vertical'
-    padding: 40
-    spacing: 20
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
 
-    Spinner:
-        id: mode_spinner
-        text: "Select Gesture"
-        values: ["Gesture 1", "Gesture 2", "Gesture 3", "Gesture 4", "Gesture 5", "Thumbs Up", "Peace Sign"]
-        size_hint: (1, 0.15)
-        # Optional styling
-        background_color: (0.1, 0.5, 0.8, 1)
-        font_size: 18
-        # Triggers a Python function whenever a new option is chosen
-        on_text: root.on_spinner_select(self.text)
+        Button:
+            text: "<-"
+            size_hint: (0.1, 0.1)
+            background_color: (0.1, 0.5, 0.8, 1)
+            color: (1, 1, 1, 1)
+            font_size: 16
+            on_press: root.go_back(self)
 
-    Label:
-        text: "Gesture 1"
-        size_hint: (1, 0.1)
-        font_size: 24
+        Spinner:
+            id: spinner_gestures
+            text: "Select Gesture"
+            values: ["Gesture 1", "Gesture 2", "Gesture 3", "Gesture 4", "Gesture 5", "Thumbs Up", "Peace Sign", "Heart"]
+            size_hint: (1, 0.15)
+            background_color: (0.1, 0.5, 0.8, 1)
+            font_size: 18
+            on_text: root.on_spinner_select(self.text)
 
-    Image:
-        id: cam_image
-        size_hint: (1, 0.75)
+        Image:
+            id: gesture_img
+            size_hint: (1, 0.75)
+
+        TextInput:
+            id: reply_input
+            text: ''
+            hint_text: 'Type your message here...'
+            multiline: True  # Set to True if you want a multi-line text box
+            size_hint: (1, 0.1)
+            font_size: 18
+
+        Button:
+            text: "Set Reply"
+            size_hint: (0.5, 0.1)
+            background_color: (0.1, 0.5, 0.8, 1)
+            color: (1, 1, 1, 1)
+            font_size: 18
+            on_press: root.on_button_click(self)
