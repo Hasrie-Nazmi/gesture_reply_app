@@ -15,15 +15,24 @@
         Spinner:
             id: spinner_gestures
             text: "Select Gesture"
-            values: ["Gesture 1", "Gesture 2", "Gesture 3", "Gesture 4", "Gesture 5", "Thumbs Up", "Peace Sign", "Heart"]
+            values: ["Gesture 0", "Gesture 1", "Gesture 2", "Gesture 3", "Gesture 4", "Gesture 5", "Thumbs Up"]
             size_hint: (1, 0.15)
             background_color: (0.1, 0.5, 0.8, 1)
             font_size: 18
             on_text: root.on_spinner_select(self.text)
 
-        Image:
-            id: gesture_img
-            size_hint: (1, 0.75)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.6
+            spacing: 10
+
+            Image:
+                id: cam_image
+                size_hint: (1, 0.75)
+
+            Image:
+                id: gesture_img
+                size_hint: (1, 0.75)
 
         TextInput:
             id: reply_input
