@@ -5,7 +5,6 @@ from kivy.graphics.texture import Texture
 
 class GestureCameraProcessor:
     def __init__(self, max_num_hands=1):
-        # Initialize MediaPipe Hands
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands(
             static_image_mode=False,
@@ -35,29 +34,23 @@ class GestureCameraProcessor:
         if self.capture and self.capture.isOpened():
             ret, frame = self.capture.read()
             if ret:
-                # 1. Mirror view
                 frame = cv2.flip(frame, 1)
 
-                # 2. Process with MediaPipe
                 rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = self.hands.process(rgb_frame)
 
                 detected_gesture = None
                 if results.multi_hand_landmarks:
                     for hand_landmarks in results.multi_hand_landmarks:
-                        # Draw skeleton
                         self.mp_draw.draw_landmarks(
                             frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS
                         )
-                        # Evaluate gestures using rules
                         detected_gesture = self._evaluate_gestures(
                             hand_landmarks.landmark)
 
-                        # If callback provided, trigger it
                         if callback_on_gesture and detected_gesture:
                             callback_on_gesture(detected_gesture)
 
-                # 3. Prepare frame for Kivy texture
                 frame = cv2.flip(frame, 0)
                 buf = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB).tobytes()
 

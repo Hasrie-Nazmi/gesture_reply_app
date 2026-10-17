@@ -5,28 +5,54 @@
         padding: 40
         spacing: 20
 
-    
+        Label:
+            id: gesture_label
+            text: ""
+            font_size: 20
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1] + 15
 
         Image:
             id: cam_image
             size_hint: (1, 0.75)
+
+        TextInput:
+            id: reply_display_box
+            text: ""
+            multiline: True
+            readonly: True
+            cursor_color: 0, 0, 0, 0
+            background_color: 0.95, 0.95, 0.95, 1
+            foreground_color: 0.2, 0.2, 0.2, 1
+            size_hint_y: None
+            height: self.minimum_height  # Dynamically hugs the text lines
+            padding: 8, 8                # Reduces internal top/bottom/left/right padding
+            font_size: 14                # Adjust font size if needed
 
 
         BoxLayout:
             orientation: 'horizontal'
             size_hint: (1, None)   
             height: 70             
-            spacing: 15            
+            spacing: 15   
+
+            Button:
+                text: "Copy Text"
+                font_size: 16
+                on_press: root.copy_text()         
             
             Button:
                 text: "Delete Previous Text"
                 font_size: 16
-                on_press: root.on_button_click("Button 1 pressed")
+                on_press: root.del_prev_text()
 
             Button:
                 text: "Clear Text"
                 font_size: 16
-                on_press: root.on_button_click("Button 2 pressed")
+                on_press: root.clear_text()
 
             Button:
                 text: "Set Custom Replies"

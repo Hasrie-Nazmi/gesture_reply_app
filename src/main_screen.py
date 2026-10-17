@@ -17,6 +17,19 @@ class MainScreen(Screen):
         # Instantiate the shared processor helper
         self.processor = GestureCameraProcessor()
 
+        self.gesture_reply_test = {
+            "gest_0": "This is a reply from Gesture 0",
+            "gest_1": "This is a reply from Gesture 1",
+            "gest_2": "This is a reply from Gesture 2",
+            "gest_3": "This is a reply from Gesture 3",
+            "gest_4": "This is a reply from Gesture 4",
+            "gest_5": "This is a reply from Gesture 5",
+            "Thumbs Up": "This is a reply from Thumbs Up"
+        }
+
+        self.current_text = ""
+        self.copied_text = []
+
     def on_enter(self, *args):
         """Triggered automatically when entering the ReplyEntry screen."""
         self.processor.start_camera(0)
@@ -36,7 +49,10 @@ class MainScreen(Screen):
 
     def handle_detected_gesture(self, gesture_name):
         """Callback triggered when a gesture is recognized."""
-        print(f"Gesture Detected in ReplyEntry: {gesture_name}!")
+
+        print(self.gesture_reply_test[gesture_name])
+        self.ids.gesture_label.text = self.gesture_reply_test[gesture_name]
+        self.current_text = self.gesture_reply_test[gesture_name]
 
     def go_back(self, instance):
         print("Going back to MainScreen!")
@@ -45,6 +61,23 @@ class MainScreen(Screen):
     def on_button_click(self, instance):
         print("Button was pressed!")
         self.manager.current = 'reply_screen'
+
+    def copy_text(self):
+        if self.current_text:
+            self.copied_text.append(self.current_text)
+            print(self.copied_text)
+            self.ids.reply_display_box.text = "\n".join(self.copied_text)
+
+    def del_prev_text(self):
+        if self.copied_text:
+            self.copied_text.pop()
+            print(self.copied_text)
+            self.ids.reply_display_box.text = "\n".join(self.copied_text)
+
+    def clear_text(self):
+        self.copied_text = []
+        print(self.copied_text)
+        self.ids.reply_display_box.text = ""
 
 
 class MainScreenApp(App):

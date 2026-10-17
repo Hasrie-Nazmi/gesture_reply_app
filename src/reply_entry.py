@@ -14,7 +14,6 @@ Builder.load_file(kv_path)
 class ReplyEntry(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Instantiate the shared processor helper
         self.processor = GestureCameraProcessor()
 
     def on_enter(self, *args):
@@ -36,7 +35,17 @@ class ReplyEntry(Screen):
 
     def handle_detected_gesture(self, gesture_name):
         """Callback triggered when a gesture is recognized."""
-        print(f"Gesture Detected in ReplyEntry: {gesture_name}!")
+        gesture_reply_test = {
+            "gest_0": "This is a reply from Gesture 0",
+            "gest_1": "This is a reply from Gesture 1",
+            "gest_2": "This is a reply from Gesture 2",
+            "gest_3": "This is a reply from Gesture 3",
+            "gest_4": "This is a reply from Gesture 4",
+            "gest_5": "This is a reply from Gesture 5",
+            "Thumbs Up": "This is a reply from Thumbs Up"
+        }
+        print(
+            f"Gesture Detected in ReplyEntry: {gesture_reply_test[gesture_name]}!")
 
     def go_back(self, instance):
         print("Going back to MainScreen!")
