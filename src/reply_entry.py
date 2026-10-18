@@ -1,4 +1,5 @@
 import os
+import json
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
@@ -15,6 +16,15 @@ class ReplyEntry(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.processor = GestureCameraProcessor()
+
+        self.gesture_replies = {
+            "Gesture 0": "",
+            "Gesture 1": "",
+            "Gesture 2": "",
+            "Gesture 3": "",
+            "Gesture 4": "",
+            "Gesture 5": "",
+        }
 
     def on_enter(self, *args):
         """Triggered automatically when entering the ReplyEntry screen."""
@@ -67,8 +77,52 @@ class ReplyEntry(Screen):
         if selected_text in gesture_map:
             self.ids.gesture_img.source = gesture_map[selected_text]
 
+        self.ids.reply_input.text = self.gesture_replies[selected_text]
+
     def on_button_click(self, instance):
         print("Button was pressed!")
+
+    def set_reply(self):
+        gest = self.ids.spinner_gestures.text
+        reply = self.ids.reply_input.text
+
+        self.gesture_replies[gest] = reply
+        print(self.gesture_replies)
+
+    def export_config_to_json(self, filepath="config.json"):
+        """Exports the current gesture replies dictionary to a local JSON file."""
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(self.gesture_replies, f,
+                          indent=4, ensure_ascii=False)
+            print(f"Successfully exported configuration to {filepath}")
+            return True
+        except Exception as e:
+            print(f"Failed to export config: {e}")
+            return False
+
+    def import_config_from_json(self, filepath="config.json"):
+        """Imports gesture replies from a local JSON file and updates the current configuration."""
+        if not os.path.exists(filepath):
+            print(f"Config file {filepath} not found. Using default replies.")
+            return False
+
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                loaded_data = json.load(f)
+
+                if isinstance(loaded_data, dict):
+                    self.gesture_replies.update(loaded_data)
+                    print(
+                        f"Successfully imported configuration from {filepath}")
+                    return True
+                else:
+                    print(
+                        "Error: Invalid JSON format (root element must be a dictionary).")
+                    return False
+        except Exception as e:
+            print(f"Failed to import config: {e}")
+            return False
 
 
 class ReplyEntryApp(App):

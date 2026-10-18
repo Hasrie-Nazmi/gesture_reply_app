@@ -14,7 +14,6 @@ Builder.load_file(kv_path)
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Instantiate the shared processor helper
         self.processor = GestureCameraProcessor()
 
         self.gesture_reply_test = {

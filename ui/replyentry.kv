@@ -14,38 +14,46 @@
 
         Spinner:
             id: spinner_gestures
-            text: "Select Gesture"
+            text: "Gesture 0"
             values: ["Gesture 0", "Gesture 1", "Gesture 2", "Gesture 3", "Gesture 4", "Gesture 5", "Thumbs Up"]
             size_hint: (1, 0.15)
             background_color: (0.1, 0.5, 0.8, 1)
             font_size: 18
             on_text: root.on_spinner_select(self.text)
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.6
-            spacing: 10
 
-            Image:
-                id: cam_image
-                size_hint: (1, 0.75)
-
-            Image:
-                id: gesture_img
-                size_hint: (1, 0.75)
+        Image:
+            id: gesture_img
+            size_hint: (1, 0.75)
 
         TextInput:
             id: reply_input
             text: ''
-            hint_text: 'Type your message here...'
-            multiline: True  # Set to True if you want a multi-line text box
+            hint_text: 'Set your reply here...'
+            multiline: True
             size_hint: (1, 0.1)
             font_size: 18
 
-        Button:
-            text: "Set Reply"
-            size_hint: (0.5, 0.1)
-            background_color: (0.1, 0.5, 0.8, 1)
-            color: (1, 1, 1, 1)
-            font_size: 18
-            on_press: root.on_button_click(self)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1, None)   
+            height: 70             
+            spacing: 15   
+
+            Button:
+                text: "Set Reply"
+                font_size: 16
+                on_press: root.set_reply()    
+
+            Button:
+                text: "Export Reply Config"
+                font_size: 16
+                on_press: root.export_config_to_json()   
+            
+            Button:
+                text: "Import Reply Config"
+                font_size: 16
+                on_press: root.import_config_from_json()
+
+
+        
