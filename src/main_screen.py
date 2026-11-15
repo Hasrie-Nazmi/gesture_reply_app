@@ -1,4 +1,5 @@
 import os
+import json
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
@@ -16,21 +17,24 @@ class MainScreen(Screen):
         super().__init__(**kwargs)
         self.processor = GestureCameraProcessor()
 
-        self.gesture_reply_test = {
-            "gest_0": "This is a reply from Gesture 0",
-            "gest_1": "This is a reply from Gesture 1",
-            "gest_2": "This is a reply from Gesture 2",
-            "gest_3": "This is a reply from Gesture 3",
-            "gest_4": "This is a reply from Gesture 4",
-            "gest_5": "This is a reply from Gesture 5",
-            "Thumbs Up": "This is a reply from Thumbs Up"
+        self.gesture_replies = {
+            "Gesture 0": "",
+            "Gesture 1": "",
+            "Gesture 2": "",
+            "Gesture 3": "",
+            "Gesture 4": "",
+            "Gesture 5": "",
         }
+
+        self.import_config_from_json()
 
         self.current_text = ""
         self.copied_text = []
 
     def on_enter(self, *args):
-        """Triggered automatically when entering the ReplyEntry screen."""
+        """Triggered automatically when entering the MainScreen."""
+        self.import_config_from_json()
+
         self.processor.start_camera(0)
         Clock.schedule_interval(self.update_frame, 1.0 / 30.0)
 
@@ -48,10 +52,46 @@ class MainScreen(Screen):
 
     def handle_detected_gesture(self, gesture_name):
         """Callback triggered when a gesture is recognized."""
+        key_mapping = {
+            "gest_0": "Gesture 0",
+            "gest_1": "Gesture 1",
+            "gest_2": "Gesture 2",
+            "gest_3": "Gesture 3",
+            "gest_4": "Gesture 4",
+            "gest_5": "Gesture 5",
+        }
 
-        print(self.gesture_reply_test[gesture_name])
-        self.ids.gesture_label.text = self.gesture_reply_test[gesture_name]
-        self.current_text = self.gesture_reply_test[gesture_name]
+        dict_key = key_mapping.get(gesture_name, gesture_name)
+        reply_message = self.gesture_replies.get(dict_key, "")
+
+        print(
+            f"Gesture Detected: {gesture_name} (Mapped to: {dict_key}) -> Reply: {reply_message}")
+
+        self.ids.gesture_label.text = f"{dict_key}: {reply_message}"
+        self.current_text = reply_message
+
+    def import_config_from_json(self, filepath="config.json"):
+        """Imports gesture replies from the local JSON config file."""
+        if not os.path.exists(filepath):
+            print(f"Config file {filepath} not found. Using default replies.")
+            return False
+
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                loaded_data = json.load(f)
+
+                if isinstance(loaded_data, dict):
+                    self.gesture_replies.update(loaded_data)
+                    print(
+                        f"Successfully imported configuration from {filepath}")
+                    return True
+                else:
+                    print(
+                        "Error: Invalid JSON format (root element must be a dictionary).")
+                    return False
+        except Exception as e:
+            print(f"Failed to import config: {e}")
+            return False
 
     def go_back(self, instance):
         print("Going back to MainScreen!")
@@ -80,7 +120,6 @@ class MainScreen(Screen):
 
 
 class MainScreenApp(App):
-
     def build(self):
         self.title = "Gesture Reply"
         return MainScreen()
